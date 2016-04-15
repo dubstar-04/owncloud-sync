@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=Owncloud-Sync
+Exec=qmlscene %U Owncloud-Sync/Main.qml
+Icon=Owncloud-Sync/Owncloud-Sync.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+
