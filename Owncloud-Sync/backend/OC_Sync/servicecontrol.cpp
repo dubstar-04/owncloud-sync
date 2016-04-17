@@ -80,14 +80,13 @@ bool ServiceControl::removeServiceFile()
 
 bool ServiceControl::serviceRunning() const
 {
-/*
+
     QProcess p;
     p.start("initctl", {"status", m_serviceName});
     p.waitForFinished();
     QByteArray output = p.readAll();
     qDebug() << output;
     return output.contains("running");
-    */
 }
 
 bool ServiceControl::setServiceRunning(bool running)
@@ -104,21 +103,21 @@ bool ServiceControl::startService()
 {
     qDebug() << "should start service";
 
-   // int ret = QProcess::execute("start", {m_serviceName});
-   // return ret == 0;
+   int ret = QProcess::execute("start", {m_serviceName});
+   return ret == 0;
 }
 
 bool ServiceControl::stopService()
 {
     qDebug() << "should stop service";
-   // int ret = QProcess::execute("stop", {m_serviceName});
-   // return ret == 0;
+   int ret = QProcess::execute("stop", {m_serviceName});
+   return ret == 0;
 }
 
 bool ServiceControl::restartService()
 {
     qDebug() << "should stop service";
-   // int ret = QProcess::execute("restart", {m_serviceName});
-   // return ret == 0;
+   int ret = QProcess::execute("restart", {m_serviceName});
+   return ret == 0;
 }
 

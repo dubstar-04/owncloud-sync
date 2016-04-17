@@ -1,7 +1,7 @@
 TEMPLATE = lib
 TARGET = OC_Syncbackend
 QT += qml quick
-CONFIG += qt plugin
+CONFIG += qt plugin c++11
 
 load(ubuntu-click)
 

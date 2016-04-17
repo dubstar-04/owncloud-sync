@@ -49,8 +49,8 @@ MainView {
                 serviceController.installServiceFile();
             }
             if (!serviceController.serviceRunning) {
-                print("Service not running. Starting now.")
-                serviceController.startService();
+                //print("Service not running. Starting now.")
+                //serviceController.startService();
             }
         }
     }
