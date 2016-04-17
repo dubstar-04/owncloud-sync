@@ -40,6 +40,21 @@ MainView {
     */
     //automaticOrientation: true
 
+    ServiceController {
+        id: serviceController
+        serviceName: "OC_Sync"
+        Component.onCompleted: {
+            if (!serviceController.serviceFileInstalled) {
+                print("Service file not installed. Installing now.")
+                serviceController.installServiceFile();
+            }
+            if (!serviceController.serviceRunning) {
+                print("Service not running. Starting now.")
+                serviceController.startService();
+            }
+        }
+    }
+
     function testConnection(){
         apl.testingConnection = true;
 
