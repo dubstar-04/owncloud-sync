@@ -19,6 +19,9 @@ import Ubuntu.Components 1.3
 import Ubuntu.Components.Popups 1.3
 import Ubuntu.Components.Pickers 1.0
 
+// C++ Plugin
+import OC_Sync 1.0
+
 
 import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.1
@@ -238,6 +241,14 @@ MainView {
                 onCheckedChanged: testConnection();
             }
 
+
+            MyType {
+                id: myType
+
+                Component.onCompleted: {
+                    myType.helloWorld = i18n.tr("Hello world..")
+                }
+            }
 
             Item{
                 anchors {top:sslLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: parent.bottom}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-15 23:14+0100\n"
+"POT-Creation-Date: 2016-04-17 10:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,62 +17,58 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:139
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:142
 msgid "Owncloud Settings"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:146
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:149
 msgid "Folders"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:156
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:159
 msgid "Username:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:170
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:173
 msgid "Password:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:184
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:187
 msgid "Sync Frequency:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:195
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:198
 msgid "minutes"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:216
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:219
 msgid "Server URL:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:231
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:234
 msgid "SSL Enabled:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:265
-msgid "Connected"
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:249
+msgid "Hello world.."
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:265
-msgid "Not Connected"
-msgstr ""
-
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:297
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:308
 msgid "Sync Settings"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:303
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:314
 msgid "Add"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:365
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:376
 msgid "Select Directory To Sync:"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync/Main.qml:392
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:403
 msgid "Close"
 msgstr ""
 
-#: /mnt/Owncloud/Work/Martham_Software/Ubuntu-Touch/Owncloud-Sync/build-Owncloud-Sync-Desktop-Debug/Owncloud-Sync/Owncloud-Sync.desktop.h:1
+#: /home/sandal/build/Owncloud-Sync/Owncloud-Sync.desktop.h:1
 msgid "Owncloud-Sync"
 msgstr ""
