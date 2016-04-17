@@ -1,19 +1,16 @@
 #include <QCoreApplication>
-#include <QDebug>
 
-#include "unistd.h"
+#include "owncloudsyncd.h"
+
+//#include "unistd.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-
-    while(true){
-        qDebug("Running...");
-        sleep(3);
-    }
-
+    OwncloudSyncd sync;
 
     return a.exec();
 }
+
 

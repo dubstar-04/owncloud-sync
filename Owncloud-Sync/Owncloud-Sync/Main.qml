@@ -44,10 +44,14 @@ MainView {
         id: serviceController
         serviceName: "OwncloudSyncd"
         Component.onCompleted: {
+
+            //Create the upstart files
             if (!serviceController.serviceFileInstalled) {
                 print("Service file not installed. Installing now.")
                 serviceController.installServiceFile();
             }
+
+            //start the sync service
             if (!serviceController.serviceRunning) {
                 print("Service not running. Starting now.")
                 serviceController.startService();
