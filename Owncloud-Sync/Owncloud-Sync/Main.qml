@@ -78,12 +78,12 @@ MainView {
             if (req.readyState == 4)
             {
                 if (req.status == 200){
-                //console.log(req.responseText);
-                apl.connected = true
-                apl.testingConnection = false;
+                    //console.log(req.responseText);
+                    apl.connected = true
+                    apl.testingConnection = false;
 
-                //turn the text in a javascript object while setting the ListView's model to it
-                //fileList.model = JSON.parse(req.responseText)
+                    //turn the text in a javascript object while setting the ListView's model to it
+                    //fileList.model = JSON.parse(req.responseText)
                 }
                 else{
                     apl.connected = false
@@ -130,6 +130,7 @@ MainView {
             property alias serverURL: serverURL.text
             property alias ssl: ssl.checked
             property alias lastSync: lastSyncLabel.lastSyncTime
+            property alias syncFolders: syncSettings.syncFolders
         }
 
         layouts: PageColumnsLayout {
@@ -281,19 +282,19 @@ MainView {
                 SequentialAnimation {
                     running: apl.testingConnection
                     loops: Animation.Infinite
-                OpacityAnimator {
-                    target: connectionIndicator;
-                    from: 1;
-                    to: 0.2;
-                    duration: 1000
-                }
+                    OpacityAnimator {
+                        target: connectionIndicator;
+                        from: 1;
+                        to: 0.2;
+                        duration: 1000
+                    }
 
-                OpacityAnimator {
-                    target: connectionIndicator;
-                    from: 0.2;
-                    to: 1;
-                    duration: 1000
-                }
+                    OpacityAnimator {
+                        target: connectionIndicator;
+                        from: 0.2;
+                        to: 1;
+                        duration: 1000
+                    }
                 }
             }
 
@@ -312,6 +313,7 @@ MainView {
 
         Page {
             id: syncSettings
+            property string syncFolders
             header: PageHeader {
                 id: syncHeader
                 title: i18n.tr("Sync Settings")
@@ -321,54 +323,137 @@ MainView {
                         Action {
                             iconName: "add"
                             text: i18n.tr("Add")
-                            onTriggered: PopupUtils.open(fileDialog)
+                            onTriggered: {
+                                folderListModel.append({"local":"", "remote":""})
+                            }
+
+                            //onTriggered: PopupUtils.open(fileDialog)
                         }
                     ]
                 }
             }
 
-            // ListItem .Header { text: "Title" }
+            function loadFolderList(){
+
+                console.log(syncFolders);
+
+
+            }
+
+            function syncFolderList(){
+
+                //var folders = [];
+                for(var i = 0; i < folderListModel.count; i++){
+
+                    //folders.push({"local":folderListModel.get(i).local, "remote":folderListModel.get(i).remote})
+                    console.log(folderListModel.get(i).local)
+                    console.log(folderListModel.get(i).remote)
+                }
+                //syncFolders = folders;
+            }
+
+            Item{
+                anchors{centerIn: parent}
+
+                Icon {
+                    id: addIcon
+                    visible: !folderListModel.count
+                    name: "add"
+                    width: units.gu(4)
+                    height: width
+                    anchors{centerIn: parent}
+                }
+
+                Label{
+                    visible: !folderListModel.count
+                    text: i18n.tr("Add Folders")
+                    anchors{horizontalCenter: parent.horizontalCenter; top: addIcon.bottom; topMargin: units.gu(2)}
+                }
+            }
+
+            Label{
+                id: localLabel
+                visible: folderListModel.count
+                text: i18n.tr("Local Folder:")
+                horizontalAlignment: Text.AlignHCenter
+                anchors{left:parent.left ;right:parent.horizontalCenter; top:syncHeader.bottom; margins: units.gu(2)}
+            }
+
+            Label{
+                id: remoteLabel
+                visible: folderListModel.count
+                text: i18n.tr("Remote Folder:")
+                horizontalAlignment: Text.AlignHCenter
+                anchors{left:parent.horizontalCenter; right:parent.right; top:syncHeader.bottom; margins: units.gu(2)}
+            }
 
             ListView {
                 id: syncList
-                anchors{left:parent.left; right:parent.right; top:syncHeader.bottom; bottom:parent.bottom}
+                visible: folderListModel.count
+                anchors{left:parent.left; right:parent.right; top:localLabel.bottom; bottom:parent.bottom}
                 clip: true
                 //width: 180; height: 200
+                model: folderListModel
 
-
-
-                model: fileListModel
                 delegate: ListItem {
                     height: layout.height + (divider.visible ? divider.height : 0)
                     ListItemLayout {
                         id: layout
                         title.text: ">"
 
-                        Label {
+                        TextField {
                             //name: "document-open"
-                            text: model.filePath
+                            text: folderListModel.get(index).local //model.filePath
                             SlotsLayout.position: SlotsLayout.Leading;
-                            //width: units.gu(2)
+                            placeholderText: i18n.tr("/home/phablet/photos")
+                            onTextChanged: {
+                                folderListModel.setProperty(index, "local", text);
+                                syncSettings.syncFolderList();
+
+                            }
                         }
 
-                        Label {
+                        TextField {
                             //name: "document-open"
-                            text: model.filePath
+                            text: folderListModel.get(index).remote//model.filePath
                             SlotsLayout.position: SlotsLayout.Trailing;
-                            //width: units.gu(2)
+                            placeholderText: i18n.tr("/phone/photos")
+                            onTextChanged: {
+                                folderListModel.setProperty(index, "remote", text)
+                                syncSettings.syncFolderList();
+                            }
 
                         }
+                    }
+
+                    leadingActions: ListItemActions {
+                        actions: [
+                            Action {
+                                iconName: "delete"
+                                onTriggered: {
+
+                                    folderListModel.remove(index, 1)
+                                    syncSettings.syncFolderList();
+                                }
+                            }
+                        ]
                     }
                 }
             }
 
+            ListModel{
+                id: folderListModel
 
-            FolderListModel {
-                id: fileListModel
+                Component.onCompleted: syncSettings.loadFolderList();
+            }
+
+            /*    FolderListModel {
+                id: folderListModel
                 showFiles: false
-                folder: Qt.resolvedUrl("/home/sandal/");
+                folder: Qt.resolvedUrl("/home/phablet/");
                 //nameFilters: [ "*" ]
             }
+            */
 
             Component {
                 id: fileDialog
@@ -381,7 +466,7 @@ MainView {
                         //width: 180;
                         height: units.gu(40)
 
-                        model: fileListModel
+                        model: folderListModel
                         delegate: ListItem {
                             height: layout.height + (divider.visible ? divider.height : 0)
                             ListItemLayout {
