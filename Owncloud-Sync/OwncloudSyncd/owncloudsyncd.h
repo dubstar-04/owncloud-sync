@@ -3,23 +3,33 @@
 
 #include <QObject>
 #include <QFileSystemWatcher>
+#include <QSettings>
 
-class OwncloudSyncd
+
+class OwncloudSyncd : public QObject
 {
-//Q_OBJECT
+Q_OBJECT
+
 public:
     OwncloudSyncd();
 
+//    ~OwncloudSyncd();
+
+private slots:
+void syncFolder(const QString& str);
+
 private:
-    void syncFolder(const QString& str);
 
-    QFileSystemWatcher watcher;
+    //QFileSystemWatcher watcher;
+    QFileSystemWatcher * watcher;
 
+    QString m_settingsFile;
     QString m_username;
     QString m_password;
     QString m_serverURL;
     bool m_ssl;
     int m_timer;
+    //QDateTime m_lastSync;
 };
 
 #endif // OWNCLOUDSYNCD_H

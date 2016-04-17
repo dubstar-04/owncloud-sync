@@ -25,7 +25,7 @@ import OwncloudSync 1.0
 
 import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.1
-import QtQuick.XmlListModel 2.0
+//import QtQuick.XmlListModel 2.0
 
 MainView {
     // objectName for functional testing purposes (autopilot-qt5)
@@ -129,6 +129,7 @@ MainView {
             property alias password: password.text
             property alias serverURL: serverURL.text
             property alias ssl: ssl.checked
+            property alias lastSync: lastSyncLabel.lastSyncTime
         }
 
         layouts: PageColumnsLayout {
@@ -222,16 +223,6 @@ MainView {
                 }
             }
 
-
-            /*
-            TextField {
-                id: frequency
-                width: parent.width
-                anchors {top:frequencyLabel.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                placeholderText: "seconds"
-                inputMethodHints: Qt.ImhDigitsOnly
-            }*/
-
             Label {
                 id: serverurlLabel
                 anchors {top:frequency.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
@@ -261,7 +252,7 @@ MainView {
             }
 
             Item{
-                anchors {top:sslLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: parent.bottom}
+                anchors {top:sslLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: lastSyncLabel.top}
                 width: units.gu(15)
                 height: width * 1.25
 
@@ -305,6 +296,14 @@ MainView {
                 }
                 }
             }
+
+            Label{
+                id: lastSyncLabel
+                property string lastSyncTime
+                text: i18n.tr("Last Sync: ") + lastSyncTime
+                anchors {bottom:parent.bottom; bottomMargin: units.gu(2); horizontalCenter:parent.horizontalCenter}
+
+            }
         }
 
 
@@ -338,7 +337,7 @@ MainView {
 
 
 
-                model: xmlModel
+                model: fileListModel
                 delegate: ListItem {
                     height: layout.height + (divider.visible ? divider.height : 0)
                     ListItemLayout {
@@ -363,14 +362,6 @@ MainView {
                 }
             }
 
-            XmlListModel {
-                id: xmlModel
-                // ...
-                XmlRole {
-                    name: "title"
-                    query: "title/string()"
-                }
-            }
 
             FolderListModel {
                 id: fileListModel
