@@ -7,7 +7,8 @@ TEMPLATE = subdirs
 load(ubuntu-click)
 
 SUBDIRS += Owncloud-Sync \
-            backend/OC_Sync
+           OwncloudSync \
+    OwncloudSyncd
 
 # specify the manifest file, this file is required for click
 # packaging and for the IDE to create runconfigurations

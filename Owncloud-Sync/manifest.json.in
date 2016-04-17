@@ -1,17 +1,15 @@
 {
-    "name": "owncloud-sync.username",
+    "name": "owncloud-sync",
     "description": "description of Owncloud-Sync",
     "architecture": "@CLICK_ARCH@",
     "title": "Owncloud-Sync",
     "hooks": {
         "Owncloud-Sync": {
             "apparmor": "Owncloud-Sync/Owncloud-Sync.apparmor",
-            "desktop":  "Owncloud-Sync/Owncloud-Sync.desktop"
+            "desktop": "Owncloud-Sync/Owncloud-Sync.desktop"
         }
     },
     "version": "0.1",
-    "maintainer": "Firstname Surname <your@mail.com>",
-    "framework" : "ubuntu-sdk-15.04.4"
+    "maintainer": "Daniel Wood <s.d.wood.82@gmail.com>",
+    "framework": "ubuntu-sdk-15.04.4"
 }
-
-

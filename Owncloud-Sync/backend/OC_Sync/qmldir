@@ -1,3 +1,0 @@
-module OC_Sync
-plugin OC_Syncbackend
-

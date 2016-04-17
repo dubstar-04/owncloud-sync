@@ -20,7 +20,7 @@ import Ubuntu.Components.Popups 1.3
 import Ubuntu.Components.Pickers 1.0
 
 // C++ Plugin
-import OC_Sync 1.0
+import OwncloudSync 1.0
 
 
 import Qt.labs.settings 1.0
@@ -32,7 +32,7 @@ MainView {
     objectName: "mainView"
 
     // Note! applicationName needs to match the "name" field of the click manifest
-    applicationName: "owncloud-sync.username"
+    applicationName: "owncloud-sync"
 
     /*
      This property enables the application to change orientation
@@ -42,15 +42,15 @@ MainView {
 
     ServiceController {
         id: serviceController
-        serviceName: "OC_Sync"
+        serviceName: "OwncloudSyncd"
         Component.onCompleted: {
             if (!serviceController.serviceFileInstalled) {
                 print("Service file not installed. Installing now.")
                 serviceController.installServiceFile();
             }
             if (!serviceController.serviceRunning) {
-                //print("Service not running. Starting now.")
-                //serviceController.startService();
+                print("Service not running. Starting now.")
+                serviceController.startService();
             }
         }
     }
@@ -254,15 +254,6 @@ MainView {
                 property string text: checked ? "https://" : "http://"
                 anchors {verticalCenter: sslLabel.verticalCenter ; left:sslLabel.right; margins: units.gu(1)}
                 onCheckedChanged: testConnection();
-            }
-
-
-            MyType {
-                id: myType
-
-                Component.onCompleted: {
-                    myType.helloWorld = i18n.tr("Hello world..")
-                }
             }
 
             Item{

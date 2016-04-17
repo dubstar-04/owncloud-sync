@@ -52,18 +52,22 @@ bool ServiceControl::installServiceFile()
         return false;
     }
 
-    QString appDir = qApp->applicationDirPath();
+    //QString appDir = qApp->applicationDirPath();
+    QString appDir = QDir::currentPath();
     // Try to replace version with "current" to be more robust against updates
-    //appDir.replace(QRegExp("rockwork.mzanetti\/[0-9.]*\/"), "rockwork.mzanetti/current/");
+    //appDir.replace(QRegExp("owncloud-sync\/[0-9.]*\/"), "owncloud-sync/current/");
 
-    f.write("start on started unity8\n");
-    f.write("exec /home/phablet/bin/owncloud-sync.sh");
+    qDebug() << QString("App Directory: ") << appDir;
 
-    /*f.write("pre-start script\n");
+    //f.write("start on started unity8\n");
+    //f.write("exec /home/phablet/bin/owncloud-sync.sh");
+
+    f.write("pre-start script\n");
     f.write("   initctl set-env LD_LIBRARY_PATH=" + appDir.toUtf8() + "/../:$LD_LIBRARY_PATH\n");
     f.write("end script\n");
-    f.write("exec " + appDir.toUtf8() + "/" + m_serviceName.toUtf8() + "\n");
-    */
+    //added extra path to find the executable - This will need correcting
+    f.write("exec " + appDir.toUtf8() + "/" + m_serviceName.toUtf8() + "/" + m_serviceName.toUtf8() + "\n");
+
     f.close();
     return true;
 }

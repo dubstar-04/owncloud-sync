@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = OC_Syncbackend
+TARGET = OwncloudSync
 QT += qml quick
 CONFIG += qt plugin c++11
 
@@ -10,12 +10,10 @@ TARGET = $$qtLibraryTarget($$TARGET)
 # Input
 SOURCES += \
     backend.cpp \
-    mytype.cpp \
     servicecontrol.cpp
 
 HEADERS += \
     backend.h \
-    mytype.h \
     servicecontrol.h
 
 OTHER_FILES = qmldir
@@ -29,7 +27,7 @@ OTHER_FILES = qmldir
 }
 
 qmldir.files = qmldir
-installPath = $${UBUNTU_CLICK_PLUGIN_PATH}/OC_Sync
+installPath = $${UBUNTU_CLICK_PLUGIN_PATH}/AppBackend
 qmldir.path = $$installPath
 target.path = $$installPath
 INSTALLS += target qmldir

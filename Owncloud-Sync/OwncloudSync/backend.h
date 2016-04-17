@@ -4,27 +4,6 @@
 #include <QtQml/QQmlEngine>
 #include <QtQml/QQmlExtensionPlugin>
 
-/*
- ----8<-----
-
- import OC_Sync 1.0
-
- Rectangle {
-   width: 200
-   height: 200
-
-   MyType {
-      id: helloType
-   }
-
-   Text {
-     anchors.centerIn: parent
-     text: helloType.helloworld
-   }
- }
-
- -----8<------
-*/
 class BackendPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
