@@ -25,6 +25,7 @@ import OwncloudSync 1.0
 
 import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.1
+import QtQuick.LocalStorage 2.0
 //import QtQuick.XmlListModel 2.0
 
 MainView {
@@ -130,7 +131,7 @@ MainView {
             property alias serverURL: serverURL.text
             property alias ssl: ssl.checked
             property alias lastSync: lastSyncLabel.lastSyncTime
-            property alias syncFolders: syncSettings.syncFolders
+            //property alias syncFolders: folderListModel //syncSettings.syncFolders
         }
 
         layouts: PageColumnsLayout {
@@ -313,7 +314,8 @@ MainView {
 
         Page {
             id: syncSettings
-            property string syncFolders
+            //property string syncFolders
+            property var db
             header: PageHeader {
                 id: syncHeader
                 title: i18n.tr("Sync Settings")
@@ -325,6 +327,7 @@ MainView {
                             text: i18n.tr("Add")
                             onTriggered: {
                                 folderListModel.append({"local":"", "remote":""})
+                                syncSettings.addToDB();
                             }
 
                             //onTriggered: PopupUtils.open(fileDialog)
@@ -333,24 +336,68 @@ MainView {
                 }
             }
 
-            function loadFolderList(){
-
-                console.log(syncFolders);
-
+            ListModel{
+                id: folderListModel
+                Component.onCompleted: syncSettings.loadDB()
 
             }
 
-            function syncFolderList(){
+            //////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////// Database Functions /////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////
 
-                //var folders = [];
-                for(var i = 0; i < folderListModel.count; i++){
+            function loadDB() {
 
-                    //folders.push({"local":folderListModel.get(i).local, "remote":folderListModel.get(i).remote})
-                    console.log(folderListModel.get(i).local)
-                    console.log(folderListModel.get(i).remote)
-                }
-                //syncFolders = folders;
+                folderListModel.clear()
+
+                syncSettings.db = LocalStorage.openDatabaseSync("Owncloud-Sync", "1.0", "Owncloud sync folders", 1000000);
+
+                syncSettings.db.transaction(
+                            function(tx) {
+                                // Create the database if it doesn't already exist
+                                tx.executeSql('CREATE TABLE IF NOT EXISTS SyncFolders(local TEXT, remote TEXT)');
+                                // load all folder paths
+                                var rs = tx.executeSql('SELECT * FROM SyncFolders');
+
+                                for(var i = 0; i < rs.rows.length; i++) {
+
+                                    folderListModel.append({"local":rs.rows.item(i).local, "remote":rs.rows.item(i).remote})
+
+                                }
+                            }
+                            )
             }
+
+            function addToDB(){
+                console.log("Create database entry in Syncfolders table");
+                syncSettings.db.transaction(
+                            function(tx) {
+                                // Create the database if it doesn't already exist
+                                tx.executeSql('INSERT INTO SyncFolders VALUES("", "")');
+                            }
+                            )
+            }
+
+            function deleteFromDB(rowID){
+
+                console.log("Delete entry from row " + Number(rowID + 1));
+                syncSettings.db.transaction(
+                            function(tx) {
+                                // Delete the selected entry
+                                tx.executeSql('DELETE FROM SyncFolders WHERE ROWID = (?)', [rowID+1]);
+                            }
+                            )
+            }
+
+            function updateDB(rowID){
+                console.log("Update entry on row " + (Number(rowID)+1));
+                syncSettings.db.transaction(
+                            function(tx) {
+                                    tx.executeSql('UPDATE SyncFolders SET local=(?), remote=(?) WHERE ROWID = (?)',[ folderListModel.get(rowID).local, folderListModel.get(rowID).remote, rowID+1]);
+                            }
+                            )
+            }
+
 
             Item{
                 anchors{centerIn: parent}
@@ -392,48 +439,52 @@ MainView {
                 visible: folderListModel.count
                 anchors{left:parent.left; right:parent.right; top:localLabel.bottom; bottom:parent.bottom}
                 clip: true
-                //width: 180; height: 200
                 model: folderListModel
 
                 delegate: ListItem {
-                    height: layout.height + (divider.visible ? divider.height : 0)
-                    ListItemLayout {
-                        id: layout
-                        title.text: ">"
+                    anchors{left:parent.left; right:parent.right}
 
                         TextField {
-                            //name: "document-open"
-                            text: folderListModel.get(index).local //model.filePath
-                            SlotsLayout.position: SlotsLayout.Leading;
+                            id: localText
+                            text: folderListModel.get(index).local
+                            anchors{left: parent.left; right: linkIcon.left; verticalCenter: parent.verticalCenter; margins: units.gu(1)}
                             placeholderText: i18n.tr("/home/phablet/photos")
                             onTextChanged: {
                                 folderListModel.setProperty(index, "local", text);
-                                syncSettings.syncFolderList();
-
+                                syncSettings.updateDB(index);
                             }
+                        }
+
+                            Icon {
+                            id: linkIcon
+                            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
+                            width: units.gu(2)
+                            height: width
+                            name: "stock_link"
                         }
 
                         TextField {
-                            //name: "document-open"
-                            text: folderListModel.get(index).remote//model.filePath
-                            SlotsLayout.position: SlotsLayout.Trailing;
+                            id: remoteText
+                            text: folderListModel.get(index).remote
+                            anchors{left:linkIcon.right; right: parent.right; verticalCenter: parent.verticalCenter; margins: units.gu(1)}
+                            //SlotsLayout.position: SlotsLayout.Trailing;
                             placeholderText: i18n.tr("/phone/photos")
                             onTextChanged: {
                                 folderListModel.setProperty(index, "remote", text)
-                                syncSettings.syncFolderList();
+                                syncSettings.updateDB(index);
                             }
-
                         }
-                    }
+
 
                     leadingActions: ListItemActions {
                         actions: [
                             Action {
                                 iconName: "delete"
                                 onTriggered: {
+                                    console.log("Delete Action: Remove index " + index)
+                                    syncSettings.deleteFromDB(index);
+                                    folderListModel.remove(index, 1);
 
-                                    folderListModel.remove(index, 1)
-                                    syncSettings.syncFolderList();
                                 }
                             }
                         ]
@@ -441,11 +492,6 @@ MainView {
                 }
             }
 
-            ListModel{
-                id: folderListModel
-
-                Component.onCompleted: syncSettings.loadFolderList();
-            }
 
             /*    FolderListModel {
                 id: folderListModel

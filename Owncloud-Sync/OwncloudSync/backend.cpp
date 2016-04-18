@@ -1,7 +1,7 @@
 #include <QtQml>
 #include <QtQml/QQmlContext>
+#include <QDebug>
 #include "backend.h"
-//#include "mytype.h"
 #include "servicecontrol.h"
 
 
@@ -15,5 +15,9 @@ void BackendPlugin::registerTypes(const char *uri)
 void BackendPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     QQmlExtensionPlugin::initializeEngine(engine, uri);
+
+    // This seems to return the wrong path?
+    qDebug() << "backend.cpp - BackendPlugin::initializeEngine - Database storage path: " << engine->offlineStoragePath();
+
 }
 
