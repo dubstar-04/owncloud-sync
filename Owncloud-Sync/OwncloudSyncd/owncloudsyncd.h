@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QFileSystemWatcher>
 #include <QSettings>
+#include <QMap>
 
 
 class OwncloudSyncd : public QObject
@@ -18,6 +19,10 @@ public:
 private slots:
 void syncFolder(const QString& str);
 
+void loadDB(const QString& path);
+void getSyncFolders();
+void addPathsToWatchlist();
+
 private:
 
     //QFileSystemWatcher watcher;
@@ -29,6 +34,9 @@ private:
     QString m_serverURL;
     bool m_ssl;
     int m_timer;
+
+    QMap<QString, QString> m_folderMap;
+
     //QDateTime m_lastSync;
 };
 

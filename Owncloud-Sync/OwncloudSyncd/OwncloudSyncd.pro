@@ -1,4 +1,4 @@
-QT += core
+QT += core sql
 QT -= gui
 
 TARGET = OwncloudSyncd

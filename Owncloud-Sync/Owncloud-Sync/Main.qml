@@ -131,7 +131,6 @@ MainView {
             property alias serverURL: serverURL.text
             property alias ssl: ssl.checked
             property alias lastSync: lastSyncLabel.lastSyncTime
-            //property alias syncFolders: folderListModel //syncSettings.syncFolders
         }
 
         layouts: PageColumnsLayout {
