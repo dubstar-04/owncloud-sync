@@ -25,13 +25,19 @@ qml_files.files += $${QML_FILES}
 config_files.path = /Owncloud-Sync
 config_files.files += $${CONF_FILES}
 
+owncloud_files.path = /Owncloud-Sync/lib/arm-linux-gnueabihf/bin
+owncloud_files.files += lib/arm-linux-gnueabihf/bin/*
+
+lib_files.path = /Owncloud-Sync/lib/arm-linux-gnueabihf/lib
+lib_files.files += lib/arm-linux-gnueabihf/lib/*
+
 #install the desktop file, a translated version is 
 #automatically created in the build directory
 desktop_file.path = /Owncloud-Sync
 desktop_file.files = $$OUT_PWD/Owncloud-Sync.desktop
 desktop_file.CONFIG += no_check_exist
 
-INSTALLS+=config_files qml_files desktop_file
+INSTALLS+=config_files qml_files desktop_file owncloud_files lib_files
 
 DISTFILES +=
 

@@ -67,7 +67,7 @@ MainView {
         var location = ssl.text + username.text + ":" + password.text + "@" +
                 serverURL.text + "/remote.php/webdav/"
 
-        console.log("TestConnection() - URL: " + location)
+        //console.log("TestConnection() - URL: " + location)
 
         //tell the request to go ahead and get the json
         req.open("GET", location, true);
@@ -300,6 +300,7 @@ MainView {
 
             Label{
                 id: lastSyncLabel
+                visible: lastSyncTime
                 property string lastSyncTime
                 text: i18n.tr("Last Sync: ") + lastSyncTime
                 anchors {bottom:parent.bottom; bottomMargin: units.gu(2); horizontalCenter:parent.horizontalCenter}
@@ -389,7 +390,7 @@ MainView {
             }
 
             function updateDB(rowID){
-                console.log("Update entry on row " + (Number(rowID)+1));
+                //console.log("Update entry on row " + (Number(rowID)+1));
                 syncSettings.db.transaction(
                             function(tx) {
                                     tx.executeSql('UPDATE SyncFolders SET local=(?), remote=(?) WHERE ROWID = (?)',[ folderListModel.get(rowID).local, folderListModel.get(rowID).remote, rowID+1]);

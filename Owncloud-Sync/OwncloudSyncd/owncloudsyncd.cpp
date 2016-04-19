@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QUrl>
 //#include <QObject>
 
 #include "owncloudsyncd.h"
@@ -144,31 +145,53 @@ void OwncloudSyncd::getSyncFolders()
     db.close();
 }
 
-void OwncloudSyncd::syncFolder(const QString& str){
+void OwncloudSyncd::syncFolder(const QString& localPath){
 
-    qDebug() << QString("Starting Owncloud Sync to ") + m_serverURL + QString(" for user ") + m_username;
-    qDebug() << QString("Syncing Folder: ") + str;
+    QString protocol;
 
-    // temp command for testing on desktop
-    //owncloudcmd [OPTION] <source_dir> <server_url>
-    // <source_dir> = str
-    //QString server_directory = m_serverURL;  //match the local dir with the server dir
+    if(m_ssl){
+        protocol = "https://";
+    }else{
+        protocol = "https://";
+    }
+
+    QString remotePath = protocol + m_serverURL + "/remote.php/webdav" + m_folderMap.value(localPath);
+    qDebug() << "Starting Owncloud Sync from " << localPath << " to " << remotePath;
+
+    /* Needs more work
+    QUrl url(remotePath);
+
+    if (!url.isValid()) {
+        qDebug() << QString("Remote Path Seems Invalid: %1").arg(url.toString());
+    }else{
+        qDebug() << "Remote Path Seems Valid";
+    }
+    */
+
+    QString owncloudcmd;
+
+    if( QFile("/opt/click.ubuntu.com/owncloud-sync/current/Owncloud-Sync/lib/arm-linux-gnueabihf/bin/owncloudcmd").exists()){
+        owncloudcmd = "/opt/click.ubuntu.com/owncloud-sync/current/Owncloud-Sync/lib/arm-linux-gnueabihf/bin/owncloudcmd";
+        qDebug() << "Using Arm owncloudcmd Binary - Mobile?";
+    }else{
+        owncloudcmd = "owncloudcmd";
+        qDebug() << "Using Local owncloudcmd Binary - Desktop?";
+    }
 
 
-    //QString owncloudcmd = "owncloudcmd";
-    //QString owncloudcmd = "/opt/click.ubuntu.com/Owncloud-Sync/current/lib/arm-linux-gnueabihf/bin/owncloudcmd";
-
-    //QStringList arguments;
-    //arguments << "-name" <<  m_username << "-password" << m_password  m_serverURL;
+    QStringList arguments;
+    arguments << "--user" << m_username << "--password" << m_password << localPath << remotePath;
 
 
 
-    //QProcess *owncloudsync = new QProcess();
-    //owncloudsync->start(owncloudcmd, arguments);
+    QProcess *owncloudsync = new QProcess();
+    //Retrieve all debug from process
+    owncloudsync->setProcessChannelMode(QProcess::ForwardedChannels);
+    owncloudsync->start(owncloudcmd, arguments);
 
 
     //Sync Complete - Save the current date and time
-    qDebug() << str << " - Sync Completed: " << QDateTime::currentDateTime();
+    qDebug() << localPath << " - Sync Completed: " << QDateTime::currentDateTime();
     //QSettings settings(m_settingsFile);
     //settings.setValue("lastSync", QDateTime::currentDateTime());
 

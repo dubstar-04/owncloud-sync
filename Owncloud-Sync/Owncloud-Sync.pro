@@ -16,7 +16,7 @@ UBUNTU_MANIFEST_FILE=manifest.json.in
 
 # specify translation domain, this must be equal with the
 # app name in the manifest file
-UBUNTU_TRANSLATION_DOMAIN="owncloud-sync.username"
+UBUNTU_TRANSLATION_DOMAIN="owncloud-sync"
 
 # specify the source files that should be included into
 # the translation file, from those files a translation

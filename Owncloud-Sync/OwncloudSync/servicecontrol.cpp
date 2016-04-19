@@ -54,19 +54,21 @@ bool ServiceControl::installServiceFile()
 
     //QString appDir = qApp->applicationDirPath();
     QString appDir = QDir::currentPath();
+    //Mobile Devie =  /opt/click.ubuntu.com/owncloud-sync/0.1
     // Try to replace version with "current" to be more robust against updates
-    //appDir.replace(QRegExp("owncloud-sync\/[0-9.]*\/"), "owncloud-sync/current/");
+    appDir.replace(QRegExp("owncloud-sync\/[0-9.]*\/"), "owncloud-sync/current/");
 
-    qDebug() << QString("App Directory: ") << appDir;
+    qDebug() << "App Directory: " << appDir;
 
-    //f.write("start on started unity8\n");
-    //f.write("exec /home/phablet/bin/owncloud-sync.sh");
-
+    f.write("start on started unity8\n");
     f.write("pre-start script\n");
-    f.write("   initctl set-env LD_LIBRARY_PATH=" + appDir.toUtf8() + "/../:$LD_LIBRARY_PATH\n");
+    f.write("   initctl set-env LD_LIBRARY_PATH=/opt/click.ubuntu.com/owncloud-sync/current/Owncloud-Sync/lib/arm-linux-gnueabihf/lib\n");
     f.write("end script\n");
-    //added extra path to find the executable - This will need correcting
-    f.write("exec " + appDir.toUtf8() + "/" + m_serviceName.toUtf8() + "/" + m_serviceName.toUtf8() + "\n");
+
+    // This works on desktop
+    //f.write("exec " + appDir.toUtf8() + "/" + m_serviceName.toUtf8() + "/" + m_serviceName.toUtf8() + "\n");
+    //Mobile
+    f.write("exec " + appDir.toUtf8() + "/lib/arm-linux-gnueabihf/bin/" + m_serviceName.toUtf8() + "\n");
 
     f.close();
     return true;
