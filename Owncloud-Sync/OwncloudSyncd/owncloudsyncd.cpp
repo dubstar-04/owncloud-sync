@@ -8,6 +8,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QUrl>
+#include <QNetworkConfigurationManager>
+
 //#include <QObject>
 
 #include "owncloudsyncd.h"
@@ -19,7 +21,7 @@ OwncloudSyncd::OwncloudSyncd()
 
     if( !QFile(m_settingsFile).exists()){
         qDebug() << "No Settings File - Quiting";
-        QCoreApplication::quit();
+        //QCoreApplication::quit();
     }
 
     qDebug() << QString("Retrieve settings from ") + m_settingsFile;
@@ -36,11 +38,11 @@ OwncloudSyncd::OwncloudSyncd()
 
     if (m_username.isEmpty() || m_password.isEmpty() || m_serverURL.isEmpty()){
         qWarning() << "Connection details missing  - Quiting";
-        QCoreApplication::quit();
+        //QCoreApplication::quit();
     }else{
 
-    getSyncFolders();
-    addPathsToWatchlist();
+        getSyncFolders();
+        addPathsToWatchlist();
 
     }
 
@@ -67,12 +69,13 @@ void OwncloudSyncd::addPathsToWatchlist(){
 
     int dirs = watcher->directories().length();
 
-    qDebug() << QString::number(dirs) << " Directories added to watchlist";
-
     if(!dirs){
-        QCoreApplication::quit();
+        qDebug() << " No Directories Configured - Quitting";
+        return;
+        //QCoreApplication::quit();
     }
 
+    qDebug() << QString::number(dirs) << " Directories added to watchlist";
     connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(syncFolder(QString)));
 
 }
@@ -147,6 +150,51 @@ void OwncloudSyncd::getSyncFolders()
 
 void OwncloudSyncd::syncFolder(const QString& localPath){
 
+
+    /*
+    QStringList files = watcher->files();
+
+    qDebug() << files.size() << "Files To Check";
+
+    bool filesToSync = false;
+
+    for(int i = 0; i < files.size(); i++){
+        qDebug() << "Sync File: " << files.at(i);
+        QFileInfo fileInfo(files.at(i));
+        if(!fileInfo.isHidden() || fileInfo.isDir()){
+            filesToSync = true;
+            break;
+        }
+    }
+
+    if(!filesToSync){
+        qDebug() << "Only Hidden Files - Quitting";
+        return;
+    }
+    */
+
+
+    //Create a connection manager, establish is a data connection is avaiable
+    QNetworkConfigurationManager mgr;
+    qDebug() << "Network Connection Type: " << mgr.defaultConfiguration().bearerTypeName();
+
+    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
+    if (!activeConfigs.count()){
+        qWarning() << "No Data Connection Available  - Quiting";
+        return;
+    }else{
+QNetworkConfiguration::BearerType connType = mgr.defaultConfiguration().bearerType();
+        if(!m_mobileData){
+            if(connType != QNetworkConfiguration::BearerEthernet && connType != QNetworkConfiguration::BearerWLAN){
+                qDebug() << "No Sync on Mobile Data - Check User Settings - Quitting";
+                return;
+            }
+        }
+
+        //Either mobile data sync is allowed or Ethernet or Wifi is available
+        qDebug() << "Mobile Data Sync: " << m_mobileData;
+    }
+
     QString protocol;
 
     if(m_ssl){
@@ -180,7 +228,7 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
 
 
     QStringList arguments;
-    arguments << "--user" << m_username << "--password" << m_password << localPath << remotePath;
+    arguments << "--user" << m_username << "--password" << m_password << "--silent" << "--non-interactive" << localPath << remotePath;
 
 
 
