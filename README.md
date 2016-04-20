@@ -1,5 +1,7 @@
 
 ![alt tag](https://github.com/dubstar-04/owncloud-sync/blob/master/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync.png?raw=true =25x)
+
+<img src="https://github.com/dubstar-04/owncloud-sync/blob/master/Owncloud-Sync/Owncloud-Sync/Owncloud-Sync.png?raw=true" width="48">
 # owncloud-sync
 Owncloud sync client for Ubuntu Devices
 Owncloud sync client allow users of Ubuntu devices to backup and synchronise data between their device and their owncloud storage. 
