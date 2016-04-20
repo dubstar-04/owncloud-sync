@@ -52,11 +52,24 @@ MainView {
                 serviceController.installServiceFile();
             }
 
+            //stop the sync service
+            //The service should be stopped here incase the user is trying to change the mobile data
+            //The other option is restarting the daemon after every change?
+            if (serviceController.serviceRunning) {
+                print("Service not running. Starting now.")
+                serviceController.stopService();
+            }
+
+        }
+
+        Component.onDestruction: {
+
             //start the sync service
             if (!serviceController.serviceRunning) {
                 print("Service not running. Starting now.")
                 serviceController.startService();
             }
+
         }
     }
 
@@ -131,6 +144,7 @@ MainView {
             property alias serverURL: serverURL.text
             property alias ssl: ssl.checked
             property alias lastSync: lastSyncLabel.lastSyncTime
+            property alias mobileData: mobileData.checked
         }
 
         layouts: PageColumnsLayout {
@@ -245,15 +259,24 @@ MainView {
                 text: i18n.tr("SSL Enabled:")
             }
 
-            CheckBox{
+            Switch{
                 id: ssl
                 property string text: checked ? "https://" : "http://"
-                anchors {verticalCenter: sslLabel.verticalCenter ; left:sslLabel.right; margins: units.gu(1)}
+                anchors {verticalCenter: sslLabel.verticalCenter ; right:parent.right; margins: units.gu(1)}
                 onCheckedChanged: testConnection();
+            }           
+            Label{
+                id: mobileDataLabel
+                anchors {top:sslLabel.bottom; left: parent.left; margins: units.gu(1)}
+                text: i18n.tr("Sync on Mobile Data:")
             }
-
+            Switch{
+                id: mobileData
+                anchors {verticalCenter: mobileDataLabel.verticalCenter ; right:parent.right; margins: units.gu(1)}
+                onCheckedChanged: console.log(mobileData.checked)
+            }
             Item{
-                anchors {top:sslLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: lastSyncLabel.top}
+                anchors {top:mobileDataLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: lastSyncLabel.top}
                 width: units.gu(15)
                 height: width * 1.25
 

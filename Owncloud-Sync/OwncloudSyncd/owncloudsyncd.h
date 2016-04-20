@@ -33,6 +33,7 @@ private:
     QString m_password;
     QString m_serverURL;
     bool m_ssl;
+    bool m_mobileData;
     int m_timer;
 
     QMap<QString, QString> m_folderMap;
