@@ -52,11 +52,24 @@ MainView {
                 serviceController.installServiceFile();
             }
 
+            //stop the sync service
+            //The service should be stopped here incase the user is trying to change the mobile data
+            //The other option is restarting the daemon after every change?
+            if (serviceController.serviceRunning) {
+                print("Service not running. Starting now.")
+                serviceController.stopService();
+            }
+
+        }
+
+        Component.onDestruction: {
+
             //start the sync service
             if (!serviceController.serviceRunning) {
                 print("Service not running. Starting now.")
                 serviceController.startService();
             }
+
         }
     }
 
@@ -260,6 +273,7 @@ MainView {
             Switch{
                 id: mobileData
                 anchors {verticalCenter: mobileDataLabel.verticalCenter ; right:parent.right; margins: units.gu(1)}
+                onCheckedChanged: console.log(mobileData.checked)
             }
             Item{
                 anchors {top:mobileDataLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: lastSyncLabel.top}

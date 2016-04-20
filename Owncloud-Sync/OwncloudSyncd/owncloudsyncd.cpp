@@ -32,6 +32,7 @@ OwncloudSyncd::OwncloudSyncd()
     m_password = settings.value("password").toString();
     m_serverURL = settings.value("serverURL").toString();
     m_ssl = settings.value("ssl").toBool();
+    m_mobileData = settings.value("mobileData").toBool();
     m_timer = settings.value("timer").toInt();
 
     qDebug() << "Username: " << m_username << " Server: " << m_serverURL;
@@ -177,13 +178,15 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
     //Create a connection manager, establish is a data connection is avaiable
     QNetworkConfigurationManager mgr;
     qDebug() << "Network Connection Type: " << mgr.defaultConfiguration().bearerTypeName();
+    qDebug() << "Mobile Data Sync: " << m_mobileData;
 
     QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
     if (!activeConfigs.count()){
         qWarning() << "No Data Connection Available  - Quiting";
         return;
-    }else{
-QNetworkConfiguration::BearerType connType = mgr.defaultConfiguration().bearerType();
+    } else {
+
+        QNetworkConfiguration::BearerType connType = mgr.defaultConfiguration().bearerType();
         if(!m_mobileData){
             if(connType != QNetworkConfiguration::BearerEthernet && connType != QNetworkConfiguration::BearerWLAN){
                 qDebug() << "No Sync on Mobile Data - Check User Settings - Quitting";
@@ -192,7 +195,6 @@ QNetworkConfiguration::BearerType connType = mgr.defaultConfiguration().bearerTy
         }
 
         //Either mobile data sync is allowed or Ethernet or Wifi is available
-        qDebug() << "Mobile Data Sync: " << m_mobileData;
     }
 
     QString protocol;
@@ -236,6 +238,8 @@ QNetworkConfiguration::BearerType connType = mgr.defaultConfiguration().bearerTy
     //Retrieve all debug from process
     owncloudsync->setProcessChannelMode(QProcess::ForwardedChannels);
     owncloudsync->start(owncloudcmd, arguments);
+    //Wait for the sync to complete. Dont time out.
+    owncloudsync->waitForFinished(-1);
 
 
     //Sync Complete - Save the current date and time
