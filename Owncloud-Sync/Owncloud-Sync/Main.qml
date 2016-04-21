@@ -18,6 +18,8 @@ import QtQuick 2.4
 import Ubuntu.Components 1.3
 import Ubuntu.Components.Popups 1.3
 import Ubuntu.Components.Pickers 1.0
+import "ui"
+import "components"
 
 // C++ Plugin
 import OwncloudSync 1.0
@@ -35,11 +37,7 @@ MainView {
     // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "owncloud-sync"
 
-    /*
-     This property enables the application to change orientation
-     when the device is rotated. The default is false.
-    */
-    //automaticOrientation: true
+    anchorToKeyboard: true
 
     ServiceController {
         id: serviceController
@@ -77,10 +75,10 @@ MainView {
         apl.testingConnection = true;
 
         var req = new XMLHttpRequest();
-        var location = ssl.text + username.text + ":" + password.text + "@" +
-                serverURL.text + "/remote.php/webdav/"
+        var location = ssl.text + username.textfield.text + ":" + password.textfield.text + "@" +
+                serverURL.textfield.text + "/remote.php/webdav/"
 
-        //console.log("TestConnection() - URL: " + location)
+        console.log("TestConnection() - URL: " + location)
 
         //tell the request to go ahead and get the json
         req.open("GET", location, true);
@@ -95,6 +93,14 @@ MainView {
                     //console.log(req.responseText);
                     apl.connected = true
                     apl.testingConnection = false;
+
+                    // Only save the account credentials once they are verified to be correct
+                    accountSettings.username = username.textfield.text
+                    accountSettings.password = password.textfield.text
+                    accountSettings.serverURL = serverURL.textfield.text
+                    accountSettings.ssl = ssl.checked
+                    accountSettings.timer = frequency.timer
+                    accountSettings.lastSync = lastSyncLabel.lastSyncTime
 
                     //turn the text in a javascript object while setting the ListView's model to it
                     //fileList.model = JSON.parse(req.responseText)
@@ -137,14 +143,15 @@ MainView {
         }
 
 
-        Settings{
-            property alias timer: frequency.timer
-            property alias username: username.text
-            property alias password: password.text
-            property alias serverURL: serverURL.text
-            property alias ssl: ssl.checked
-            property alias lastSync: lastSyncLabel.lastSyncTime
-            property alias mobileData: mobileData.checked
+        Settings {
+            id: accountSettings
+            property string timer
+            property string password
+            property string username
+            property string serverURL
+            property bool ssl
+            property string lastSync
+            property bool mobileData
         }
 
         layouts: PageColumnsLayout {
@@ -164,17 +171,15 @@ MainView {
             }
         }
 
-
-
         //////////////////// Owncloud Settings ////////////////////
 
         Page {
             id: ocSettings
-            //anchors {margins: units.gu(1)}
 
             header: PageHeader {
                 id: header
                 title: i18n.tr("Owncloud Settings")
+                flickable: ocSettingsFlickable
 
                 trailingActionBar {
                     actions: [
@@ -188,146 +193,155 @@ MainView {
                 }
             }
 
-            Label {
-                id:usernameLabel
-                anchors {top:header.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                text: i18n.tr("Username:")
-            }
-            TextField {
-                id: username
-                width: parent.width
-                anchors {top:usernameLabel.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                placeholderText: "Username"
-                hasClearButton: true
-                onTextChanged: testConnection();
-            }
+            Flickable {
+                id: ocSettingsFlickable
 
-            Label {
-                id: passwordLabel
-                anchors {top:username.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                text: i18n.tr("Password:")
-            }
-            TextField {
-                id: password
-                width: parent.width
-                anchors {top:passwordLabel.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                placeholderText: "password"
-                echoMode: TextInput.Password
-                onTextChanged: testConnection();
-            }
+                anchors.fill: parent
+                contentHeight: ocSettingsColumn.height
 
-            Label {
-                id: frequencyLabel
-                anchors {top:password.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                text: i18n.tr("Sync Frequency:")
-            }
+                Column {
+                    id: ocSettingsColumn
 
-            OptionSelector {
-                id: frequency
-                width: parent.width
-                property int timer
-                //height: units.gu(4)
-                anchors {top:frequencyLabel.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                model: [15, 30, 45, 60, 90, 120]
+                    spacing: units.gu(1.5)
+                    anchors { top: parent.top; left: parent.left; right: parent.right; margins: units.gu(2) }
 
-                delegate: OptionSelectorDelegate{text: frequency.model[index] + " " + i18n.tr("minutes")}
-
-                onSelectedIndexChanged: {
-                    timer = model[selectedIndex] * 60;
-                    print("Index Changed: " + model[selectedIndex]);
-                }
-            }
-
-            Label {
-                id: serverurlLabel
-                anchors {top:frequency.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                text: i18n.tr("Server URL:")
-            }
-            TextField {
-                id: serverURL
-                width: parent.width
-                anchors {top:serverurlLabel.bottom; left: parent.left; right:parent.right; margins: units.gu(1)}
-                placeholderText: "myurl.com/owncloud"
-                hasClearButton: true
-                onTextChanged: testConnection();
-            }
-
-
-            Label{
-                id: sslLabel
-                anchors {top:serverURL.bottom; left: parent.left; margins: units.gu(1)}
-                text: i18n.tr("SSL Enabled:")
-            }
-
-            Switch{
-                id: ssl
-                property string text: checked ? "https://" : "http://"
-                anchors {verticalCenter: sslLabel.verticalCenter ; right:parent.right; margins: units.gu(1)}
-                onCheckedChanged: testConnection();
-            }           
-            Label{
-                id: mobileDataLabel
-                anchors {top:sslLabel.bottom; left: parent.left; margins: units.gu(1)}
-                text: i18n.tr("Sync on Mobile Data:")
-            }
-            Switch{
-                id: mobileData
-                anchors {verticalCenter: mobileDataLabel.verticalCenter ; right:parent.right; margins: units.gu(1)}
-                onCheckedChanged: console.log(mobileData.checked)
-            }
-            Item{
-                anchors {top:mobileDataLabel.bottom; horizontalCenter: parent.horizontalCenter; bottom: lastSyncLabel.top}
-                width: units.gu(15)
-                height: width * 1.25
-
-                Rectangle{
-                    id: connectionIndicator
-                    color: apl.testingConnection ? UbuntuColors.orange : (apl.connected ? UbuntuColors.green : UbuntuColors.red)
-                    anchors{ verticalCenter:parent.verticalCenter; horizontalCenter: parent.horizontalCenter}
-                    width: parent.width * 0.85
-                    height: width
-                    radius: width / 2
-                }
-
-                Icon {
-                    anchors{ horizontalCenter: connectionIndicator.horizontalCenter; verticalCenter: connectionIndicator.verticalCenter}
-                    width: units.gu(4)
-                    height: width
-                    color: UbuntuColors.porcelain
-                    name: apl.connected ? "tick" : "close"
-                }
-
-                Label {
-                    text: apl.connected ? i18n.tr("Connected") : i18n.tr("Not Connected")
-                    anchors{ horizontalCenter: parent.horizontalCenter; top: connectionIndicator.bottom; topMargin: units.gu(2)}
-                }
-
-                SequentialAnimation {
-                    running: apl.testingConnection
-                    loops: Animation.Infinite
-                    OpacityAnimator {
-                        target: connectionIndicator;
-                        from: 1;
-                        to: 0.2;
-                        duration: 1000
+                    FormTextField {
+                        id: username
+                        title.text: i18n.tr("Username")
+                        textfield.placeholderText: i18n.tr("Username")
+                        textfield.text: accountSettings.username
                     }
 
-                    OpacityAnimator {
-                        target: connectionIndicator;
-                        from: 0.2;
-                        to: 1;
-                        duration: 1000
+                    FormTextField {
+                        id: password
+                        title.text: i18n.tr("Password")
+                        textfield.text: accountSettings.password
+                        textfield.placeholderText: i18n.tr("Password")
+                        textfield.echoMode: TextInput.Password
+                    }
+
+                    Label {
+                        id: frequencyLabel
+                        text: i18n.tr("Sync Frequency:")
+                    }
+
+                    OptionSelector {
+                        id: frequency
+                        width: parent.width
+                        property int timer: accountSettings.timer
+                        model: [15, 30, 45, 60, 90, 120]
+
+                        delegate: OptionSelectorDelegate{text: frequency.model[index] + " " + i18n.tr("minutes")}
+
+                        onSelectedIndexChanged: {
+                            timer = model[selectedIndex] * 60;
+                            print("Index Changed: " + model[selectedIndex]);
+                        }
+                    }
+
+                    FormTextField {
+                        id: serverURL
+                        title.text: i18n.tr("Server URL")
+                        textfield.placeholderText: "myurl.com/owncloud"
+                        textfield.hasClearButton: true
+                        textfield.text: accountSettings.serverURL
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: sslLabel.implicitHeight + units.gu(1)
+
+                        Label{
+                            id: sslLabel
+                            text: i18n.tr("SSL Enabled:")
+                            anchors { left: parent.left; right: ssl.left; verticalCenter: parent.verticalCenter }
+                        }
+
+                        Switch{
+                            id: ssl
+                            property string text: checked ? "https://" : "http://"
+                            checked: accountSettings.ssl
+                            anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+                        }
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: mobileDataLabel.implicitHeight + units.gu(1)
+
+                        Label{
+                            id: mobileDataLabel
+                            text: i18n.tr("Sync on Mobile Data:")
+                            anchors { left: parent.left; right: mobileData.left; verticalCenter: parent.verticalCenter }
+                        }
+
+                        Switch{
+                            id: mobileData
+                            checked: accountSettings.mobileData
+                            anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+                        }
+                    }
+
+                    Button {
+                        text: "Connect"
+                        color: UbuntuColors.green
+                        width: parent.width
+                        onClicked: testConnection()
+                    }
+
+                    Item{
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: units.gu(15)
+                        height: width * 1.25
+
+                        Rectangle{
+                            id: connectionIndicator
+                            color: apl.testingConnection ? UbuntuColors.orange : (apl.connected ? UbuntuColors.green : UbuntuColors.red)
+                            anchors{ verticalCenter:parent.verticalCenter; horizontalCenter: parent.horizontalCenter}
+                            width: parent.width * 0.85
+                            height: width
+                            radius: width / 2
+                        }
+
+                        Icon {
+                            anchors{ horizontalCenter: connectionIndicator.horizontalCenter; verticalCenter: connectionIndicator.verticalCenter}
+                            width: units.gu(4)
+                            height: width
+                            color: UbuntuColors.porcelain
+                            name: apl.connected ? "tick" : "close"
+                        }
+
+                        Label {
+                            text: apl.connected ? i18n.tr("Connected") : i18n.tr("Not Connected")
+                            anchors{ horizontalCenter: parent.horizontalCenter; top: connectionIndicator.bottom; topMargin: units.gu(2)}
+                        }
+
+                        SequentialAnimation {
+                            running: apl.testingConnection
+                            loops: Animation.Infinite
+                            OpacityAnimator {
+                                target: connectionIndicator;
+                                from: 1;
+                                to: 0.2;
+                                duration: 1000
+                            }
+
+                            OpacityAnimator {
+                                target: connectionIndicator;
+                                from: 0.2;
+                                to: 1;
+                                duration: 1000
+                            }
+                        }
+                    }
+
+                    Label{
+                        id: lastSyncLabel
+                        visible: lastSyncTime
+                        property string lastSyncTime: accountSettings.lastSync
+                        text: i18n.tr("Last Sync: ") + lastSyncTime
                     }
                 }
-            }
-
-            Label{
-                id: lastSyncLabel
-                visible: lastSyncTime
-                property string lastSyncTime
-                text: i18n.tr("Last Sync: ") + lastSyncTime
-                anchors {bottom:parent.bottom; bottomMargin: units.gu(2); horizontalCenter:parent.horizontalCenter}
-
             }
         }
 

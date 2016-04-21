@@ -10,7 +10,7 @@ CONF_FILES +=  Owncloud-Sync.apparmor \
                Owncloud-Sync.png
 
 AP_TEST_FILES += tests/autopilot/run \
-                 $$files(tests/*.py,true)               
+                 $$files(tests/*.py,true)
 
 OTHER_FILES += $${CONF_FILES} \
                $${QML_FILES} \
@@ -20,6 +20,14 @@ OTHER_FILES += $${CONF_FILES} \
 #specify where the qml/js files are installed to
 qml_files.path = /Owncloud-Sync
 qml_files.files += $${QML_FILES}
+
+#specify where the ui qml/js files are installed to
+ui_files.path = /Owncloud-Sync/ui
+ui_files.files += ui/*.qml
+
+#specify where the component qml/js files are installed to
+component_files.path = /Owncloud-Sync/components
+component_files.files += components/*.qml
 
 #specify where the config files are installed to
 config_files.path = /Owncloud-Sync
@@ -37,7 +45,7 @@ desktop_file.path = /Owncloud-Sync
 desktop_file.files = $$OUT_PWD/Owncloud-Sync.desktop
 desktop_file.CONFIG += no_check_exist
 
-INSTALLS+=config_files qml_files desktop_file owncloud_files lib_files
+INSTALLS+=config_files qml_files desktop_file owncloud_files lib_files ui_files component_files
 
 DISTFILES +=
 
