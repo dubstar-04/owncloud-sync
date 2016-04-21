@@ -3,8 +3,8 @@ TARGET = Owncloud-Sync
 
 RESOURCES += Owncloud-Sync.qrc
 
-QML_FILES += $$files(*.qml,true) \
-             $$files(*.js,true)
+#QML_FILES += $$files(*.qml,true) \
+#             $$files(*.js,true)
 
 CONF_FILES +=  Owncloud-Sync.apparmor \
                Owncloud-Sync.png
@@ -17,9 +17,10 @@ OTHER_FILES += $${CONF_FILES} \
                $${AP_TEST_FILES} \
                Owncloud-Sync.desktop
 
+
 #specify where the qml/js files are installed to
 qml_files.path = /Owncloud-Sync
-qml_files.files += $${QML_FILES}
+qml_files.files += *.qml #$${QML_FILES}
 
 #specify where the ui qml/js files are installed to
 ui_files.path = /Owncloud-Sync/ui

@@ -26,7 +26,7 @@ void addPathsToWatchlist();
 private:
 
     //QFileSystemWatcher watcher;
-    QFileSystemWatcher * watcher;
+    QFileSystemWatcher * m_watcher;
 
     QString m_settingsFile;
     QString m_username;

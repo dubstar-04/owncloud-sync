@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QDebug>
 #include <QProcess>
 #include <QSettings>
@@ -9,8 +9,10 @@
 #include <QSqlQuery>
 #include <QUrl>
 #include <QNetworkConfigurationManager>
+#include <QTimer>
 
 //#include <QObject>
+#include <unistd.h>
 
 #include "owncloudsyncd.h"
 
@@ -43,7 +45,11 @@ OwncloudSyncd::OwncloudSyncd()
     }else{
 
         getSyncFolders();
-        addPathsToWatchlist();
+        //addPathsToWatchlist();
+
+        QTimer *timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), this, SLOT(syncFolder(QString)));
+        timer->start(m_timer);
 
     }
 
@@ -51,7 +57,7 @@ OwncloudSyncd::OwncloudSyncd()
 
 void OwncloudSyncd::addPathsToWatchlist(){
 
-    watcher = new QFileSystemWatcher(this);
+    m_watcher = new QFileSystemWatcher(this);
 
     QMapIterator<QString, QString> i(m_folderMap);
     while (i.hasNext()) {
@@ -59,7 +65,8 @@ void OwncloudSyncd::addPathsToWatchlist(){
         //qDebug() << i.key() << ": " << i.value() << endl;
 
         if(QDir(i.key()).exists()){
-            watcher->addPath(i.key());
+            m_watcher->addPath(i.key());
+            //m_watcher->removePath(i.key() + "/.csync_journal.db");
             qDebug() << "Directory: " << i.key() << " Added to watchlist";
         }else{
             qDebug() << "Directory: " << i.key() << " Doesn't exist";
@@ -68,7 +75,7 @@ void OwncloudSyncd::addPathsToWatchlist(){
 
     }
 
-    int dirs = watcher->directories().length();
+    int dirs = m_watcher->directories().length();
 
     if(!dirs){
         qDebug() << " No Directories Configured - Quitting";
@@ -77,7 +84,7 @@ void OwncloudSyncd::addPathsToWatchlist(){
     }
 
     qDebug() << QString::number(dirs) << " Directories added to watchlist";
-    connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(syncFolder(QString)));
+    connect(m_watcher, SIGNAL(directoryChanged(QString)), this, SLOT(syncFolder(QString)));
 
 }
 
@@ -151,6 +158,7 @@ void OwncloudSyncd::getSyncFolders()
 
 void OwncloudSyncd::syncFolder(const QString& localPath){
 
+    qDebug() << "\n"<< endl;
 
     /*
     QStringList files = watcher->files();
@@ -174,6 +182,17 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
     }
     */
 
+    m_watcher->blockSignals(true);
+
+    if (QFile(localPath + "/.csync_journal.db-shm").exists() ||
+          QFile(localPath + "/.csync_journal.db-wal").exists()  ){
+
+        qDebug() << "Delete Stale Database File";
+
+        QFile::remove(localPath + "/.csync_journal.db-shm");
+        QFile::remove(localPath + "/.csync_journal.db-wal");
+
+    }
 
     //Create a connection manager, establish is a data connection is avaiable
     QNetworkConfigurationManager mgr;
@@ -205,7 +224,7 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
         protocol = "https://";
     }
 
-    QString remotePath = protocol + m_serverURL + "/remote.php/webdav" + m_folderMap.value(localPath);
+    QString remotePath = protocol + m_serverURL + QStringLiteral("/remote.php/webdav") + m_folderMap.value(localPath);
     qDebug() << "Starting Owncloud Sync from " << localPath << " to " << remotePath;
 
     /* Needs more work
@@ -241,7 +260,25 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
     //Wait for the sync to complete. Dont time out.
     owncloudsync->waitForFinished(-1);
 
+    //sleep(10);
+    QDateTime maxWait = QDateTime::currentDateTime();
+    maxWait.addSecs(30);
 
+    while (QFile(localPath + "/.csync_journal.db-shm").exists()){
+
+        qDebug() << "Waiting For Sync To Complete: " << QDateTime::currentDateTime();
+
+        if(QDateTime::currentDateTime() > maxWait){
+            qDebug() << "maxWait Reached - Quitting Loop";
+            break;
+
+        }
+
+    }
+
+
+    //sleep(10);
+    m_watcher->blockSignals(false);
     //Sync Complete - Save the current date and time
     qDebug() << localPath << " - Sync Completed: " << QDateTime::currentDateTime();
     //QSettings settings(m_settingsFile);
