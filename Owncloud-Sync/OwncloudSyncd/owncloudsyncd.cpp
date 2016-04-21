@@ -12,7 +12,7 @@
 #include <QTimer>
 
 //#include <QObject>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "owncloudsyncd.h"
 
@@ -48,8 +48,30 @@ OwncloudSyncd::OwncloudSyncd()
         //addPathsToWatchlist();
 
         QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(syncFolder(QString)));
+        connect(timer, SIGNAL(timeout()), this, SLOT(syncDirs()));
         timer->start(m_timer);
+
+        qDebug() << "Sync Frequency: " << QString::number(m_timer);
+
+    }
+
+}
+
+
+void OwncloudSyncd::syncDirs(){
+
+    qDebug() << "Sync Dirs";
+
+    QMapIterator<QString, QString> i(m_folderMap);
+    while (i.hasNext()) {
+        i.next();
+        if(QDir(i.key()).exists()){
+            syncDir(i.key());
+            qDebug() << "Directory: " << i.key() << " - Initiate Sync";
+        }else{
+            qDebug() << "Directory: " << i.key() << " Doesn't exist";
+        }
+
 
     }
 
@@ -156,7 +178,7 @@ void OwncloudSyncd::getSyncFolders()
     db.close();
 }
 
-void OwncloudSyncd::syncFolder(const QString& localPath){
+void OwncloudSyncd::syncDir(const QString& localPath){
 
     qDebug() << "\n"<< endl;
 
@@ -182,7 +204,7 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
     }
     */
 
-    m_watcher->blockSignals(true);
+    //m_watcher->blockSignals(true);
 
     if (QFile(localPath + "/.csync_journal.db-shm").exists() ||
           QFile(localPath + "/.csync_journal.db-wal").exists()  ){
@@ -278,7 +300,7 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
 
 
     //sleep(10);
-    m_watcher->blockSignals(false);
+    //m_watcher->blockSignals(false);
     //Sync Complete - Save the current date and time
     qDebug() << localPath << " - Sync Completed: " << QDateTime::currentDateTime();
     //QSettings settings(m_settingsFile);

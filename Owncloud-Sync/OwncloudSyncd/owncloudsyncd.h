@@ -17,7 +17,8 @@ public:
 //    ~OwncloudSyncd();
 
 private slots:
-void syncFolder(const QString& str);
+void syncDir(const QString& str);
+void syncDirs();
 
 void loadDB(const QString& path);
 void getSyncFolders();

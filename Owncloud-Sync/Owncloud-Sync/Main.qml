@@ -234,7 +234,8 @@ MainView {
                         delegate: OptionSelectorDelegate{text: frequency.model[index] + " " + i18n.tr("minutes")}
 
                         onSelectedIndexChanged: {
-                            timer = model[selectedIndex] * 60;
+                            // convert minutes to mSecs
+                            timer = model[selectedIndex] * 60 * 1000;
                             print("Index Changed: " + model[selectedIndex]);
                         }
                     }
