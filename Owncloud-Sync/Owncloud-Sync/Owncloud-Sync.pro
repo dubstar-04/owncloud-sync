@@ -3,8 +3,8 @@ TARGET = Owncloud-Sync
 
 RESOURCES += Owncloud-Sync.qrc
 
-#QML_FILES += $$files(*.qml,true) \
-#             $$files(*.js,true)
+QML_FILES += $$files(*.qml,true) \
+             $$files(*.js,true)
 
 CONF_FILES +=  Owncloud-Sync.apparmor \
                Owncloud-Sync.png
