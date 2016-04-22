@@ -75,7 +75,7 @@ MainView {
         apl.testingConnection = true;
 
         var req = new XMLHttpRequest();
-        var location = ssl.text + username.textfield.text + ":" + password.textfield.text + "@" +
+        var location = "https://" + username.textfield.text + ":" + password.textfield.text + "@" +
                 serverURL.textfield.text + "/remote.php/webdav/"
 
         console.log("TestConnection() - URL: " + location)
@@ -98,7 +98,6 @@ MainView {
                     accountSettings.username = username.textfield.text
                     accountSettings.password = password.textfield.text
                     accountSettings.serverURL = serverURL.textfield.text
-                    accountSettings.ssl = ssl.checked
                     accountSettings.timer = frequency.timer
                     accountSettings.lastSync = lastSyncLabel.lastSyncTime
 
@@ -149,7 +148,6 @@ MainView {
             property string password
             property string username
             property string serverURL
-            property bool ssl
             property string lastSync
             property bool mobileData
         }
@@ -222,7 +220,7 @@ MainView {
 
                     Label {
                         id: frequencyLabel
-                        text: i18n.tr("Sync Frequency:")
+                        text: i18n.tr("Sync Frequency")
                     }
 
                     OptionSelector {
@@ -242,27 +240,9 @@ MainView {
                     FormTextField {
                         id: serverURL
                         title.text: i18n.tr("Server URL")
-                        textfield.placeholderText: "myurl.com/owncloud"
+                        textfield.placeholderText: "https://myurl.com/owncloud"
                         textfield.hasClearButton: true
                         textfield.text: accountSettings.serverURL
-                    }
-
-                    Item {
-                        width: parent.width
-                        height: sslLabel.implicitHeight + units.gu(1)
-
-                        Label{
-                            id: sslLabel
-                            text: i18n.tr("SSL Enabled:")
-                            anchors { left: parent.left; right: ssl.left; verticalCenter: parent.verticalCenter }
-                        }
-
-                        Switch{
-                            id: ssl
-                            property string text: checked ? "https://" : "http://"
-                            checked: accountSettings.ssl
-                            anchors { right: parent.right; verticalCenter: parent.verticalCenter }
-                        }
                     }
 
                     Item {
@@ -271,7 +251,7 @@ MainView {
 
                         Label{
                             id: mobileDataLabel
-                            text: i18n.tr("Sync on Mobile Data:")
+                            text: i18n.tr("Sync on Mobile Data")
                             anchors { left: parent.left; right: mobileData.left; verticalCenter: parent.verticalCenter }
                         }
 
