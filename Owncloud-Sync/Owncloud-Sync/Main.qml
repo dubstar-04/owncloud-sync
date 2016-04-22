@@ -75,8 +75,11 @@ MainView {
         apl.testingConnection = true;
 
         var req = new XMLHttpRequest();
-        var location = "https://" + username + ":" + password + "@" +
-                serverURL + "/remote.php/webdav/"
+        var protocol = serverURL.toLowerCase().indexOf("http://") === -1 ? "https://" : "http://"
+        var url = serverURL.replace(/^https?\:\/\//i, "")
+
+        var location = protocol + username + ":" + password + "@" +
+                url + "/remote.php/webdav/"
 
         console.log("TestConnection() - URL: " + location)
 
