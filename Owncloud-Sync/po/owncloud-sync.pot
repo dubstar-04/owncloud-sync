@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-21 21:01+0100\n"
+"POT-Creation-Date: 2016-04-22 16:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,90 +17,90 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:181
-msgid "Owncloud Settings"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:189
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:183
 msgid "Folders"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:210
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:211
-msgid "Username"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:217
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:219
-msgid "Password"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:225
-msgid "Sync Frequency:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:234
-msgid "minutes"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:244
-msgid "Server URL"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:256
-msgid "SSL Enabled:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:274
-msgid "Sync on Mobile Data:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:315
-msgid "Connected"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:315
-msgid "Not Connected"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:342
-msgid "Last Sync: "
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:358
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:209
 msgid "Sync Settings"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:364
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:215
 msgid "Add"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:453
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:304
 msgid "Add Folders"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:461
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:312
 msgid "Local Folder:"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:469
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:320
 msgid "Remote Folder:"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:488
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:339
 msgid "/home/phablet/photos"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:508
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:359
 msgid "/phone/photos"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:545
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:396
 msgid "Select Directory To Sync:"
 msgstr ""
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:572
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:423
 msgid "Close"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:18
+msgid "Owncloud Settings"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:37
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:38
+msgid "Username"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:44
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:46
+msgid "Password"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:52
+msgid "Sync Frequency"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:61
+msgid "minutes"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:71
+msgid "Server URL"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:83
+msgid "Sync on Mobile Data"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:96
+msgid "Connect"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:124
+msgid "Connected"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:124
+msgid "Not Connected"
+msgstr ""
+
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:151
+msgid "Last Sync: "
 msgstr ""
 
 #: /home/sandal/build/Desktop/Owncloud-Sync/Owncloud-Sync.desktop.h:1
