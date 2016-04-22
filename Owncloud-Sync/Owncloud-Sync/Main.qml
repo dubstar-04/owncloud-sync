@@ -181,10 +181,6 @@ MainView {
                 onTriggered: apl.addPageToNextColumn(apl.primaryPageSource, syncSettings)
             }
 
-            onConnectClicked: {
-                 testConnection(username, password, timer, serverURL, mobileData, lastSync)
-            }
-
             accountSettings: {
                 "username": accountSettings.username,
                 "password": accountSettings.password,

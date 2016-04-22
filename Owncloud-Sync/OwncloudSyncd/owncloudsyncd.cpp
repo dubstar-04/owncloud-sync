@@ -9,10 +9,10 @@
 #include <QSqlQuery>
 #include <QUrl>
 #include <QNetworkConfigurationManager>
-#include <QTimer>
+//#include <QTimer>
 
 //#include <QObject>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "owncloudsyncd.h"
 
@@ -35,7 +35,7 @@ OwncloudSyncd::OwncloudSyncd()
     m_serverURL = settings.value("serverURL").toString();
     m_ssl = settings.value("ssl").toBool();
     m_mobileData = settings.value("mobileData").toBool();
-    m_timer = settings.value("timer").toInt();
+    m_syncInterval = settings.value("timer").toInt();
 
     qDebug() << "Username: " << m_username << " Server: " << m_serverURL;
 
@@ -47,9 +47,34 @@ OwncloudSyncd::OwncloudSyncd()
         getSyncFolders();
         //addPathsToWatchlist();
 
-        QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(syncFolder(QString)));
-        timer->start(m_timer);
+        m_timer = new QTimer(this);
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(syncDirs()));
+        m_timer->setInterval(m_syncInterval / 100);
+        m_timer->start();
+
+        //timer->start(m_timer / 100);
+
+        qDebug() << "Sync Frequency: " << QString::number(m_syncInterval);
+
+    }
+
+}
+
+
+void OwncloudSyncd::syncDirs(){
+
+    qDebug() << "Sync Dirs";
+
+    QMapIterator<QString, QString> i(m_folderMap);
+    while (i.hasNext()) {
+        i.next();
+        if(QDir(i.key()).exists()){
+            syncDir(i.key());
+            qDebug() << "Directory: " << i.key() << " - Initiate Sync";
+        }else{
+            qDebug() << "Directory: " << i.key() << " Doesn't exist";
+        }
+
 
     }
 
@@ -156,7 +181,7 @@ void OwncloudSyncd::getSyncFolders()
     db.close();
 }
 
-void OwncloudSyncd::syncFolder(const QString& localPath){
+void OwncloudSyncd::syncDir(const QString& localPath){
 
     qDebug() << "\n"<< endl;
 
@@ -182,7 +207,7 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
     }
     */
 
-    m_watcher->blockSignals(true);
+    //m_watcher->blockSignals(true);
 
     if (QFile(localPath + "/.csync_journal.db-shm").exists() ||
           QFile(localPath + "/.csync_journal.db-wal").exists()  ){
@@ -214,6 +239,8 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
         }
 
         //Either mobile data sync is allowed or Ethernet or Wifi is available
+        //stop m_timer running while syncing
+        m_timer->stop();
     }
 
     QString protocol;
@@ -278,9 +305,13 @@ void OwncloudSyncd::syncFolder(const QString& localPath){
 
 
     //sleep(10);
-    m_watcher->blockSignals(false);
+    //m_watcher->blockSignals(false);
     //Sync Complete - Save the current date and time
     qDebug() << localPath << " - Sync Completed: " << QDateTime::currentDateTime();
+
+    //start the timer again
+    m_timer->start();
+
     //QSettings settings(m_settingsFile);
     //settings.setValue("lastSync", QDateTime::currentDateTime());
 
