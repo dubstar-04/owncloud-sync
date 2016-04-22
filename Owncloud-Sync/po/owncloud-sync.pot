@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 16:23+0100\n"
+"POT-Creation-Date: 2016-04-22 21:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:183
+#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:182
 msgid "Folders"
 msgstr ""
 
@@ -41,7 +41,6 @@ msgstr ""
 msgid "Remote Folder:"
 msgstr ""
 
-<<<<<<< HEAD
 #: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:339
 msgid "/home/phablet/photos"
 msgstr ""
@@ -102,66 +101,6 @@ msgstr ""
 
 #: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/ui/AccountSettingsPage.qml:151
 msgid "Last Sync: "
-=======
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:245
-msgid "Server URL"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:257
-msgid "SSL Enabled:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:275
-msgid "Sync on Mobile Data:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:316
-msgid "Connected"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:316
-msgid "Not Connected"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:343
-msgid "Last Sync: "
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:359
-msgid "Sync Settings"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:365
-msgid "Add"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:454
-msgid "Add Folders"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:462
-msgid "Local Folder:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:470
-msgid "Remote Folder:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:489
-msgid "/home/phablet/photos"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:509
-msgid "/phone/photos"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:546
-msgid "Select Directory To Sync:"
-msgstr ""
-
-#: /home/sandal/owncloud-sync/Owncloud-Sync/Owncloud-Sync/Main.qml:573
-msgid "Close"
->>>>>>> master
 msgstr ""
 
 #: /home/sandal/build/Desktop/Owncloud-Sync/Owncloud-Sync.desktop.h:1

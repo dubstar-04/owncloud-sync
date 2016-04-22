@@ -144,7 +144,6 @@ MainView {
             testConnection();
         }
 
-
         Settings {
             id: accountSettings
             property string timer
@@ -191,6 +190,11 @@ MainView {
                 "serverURL": accountSettings.serverURL,
                 "mobileData": accountSettings.mobileData,
                 "lastSync": accountSettings.lastSync
+            }
+
+
+            onConnectClicked: {
+            testConnection(username, password, timer, serverURL, mobileData, lastSync)
             }
         }
 
