@@ -5,6 +5,7 @@
 #include <QFileSystemWatcher>
 #include <QSettings>
 #include <QMap>
+#include <QTimer>
 
 
 class OwncloudSyncd : public QObject
@@ -28,6 +29,7 @@ private:
 
     //QFileSystemWatcher watcher;
     QFileSystemWatcher * m_watcher;
+    QTimer * m_timer;
 
     QString m_settingsFile;
     QString m_username;
@@ -35,7 +37,7 @@ private:
     QString m_serverURL;
     bool m_ssl;
     bool m_mobileData;
-    int m_timer;
+    int m_syncInterval;
 
     QMap<QString, QString> m_folderMap;
 

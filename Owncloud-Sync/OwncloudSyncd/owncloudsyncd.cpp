@@ -9,7 +9,7 @@
 #include <QSqlQuery>
 #include <QUrl>
 #include <QNetworkConfigurationManager>
-#include <QTimer>
+//#include <QTimer>
 
 //#include <QObject>
 //#include <unistd.h>
@@ -35,7 +35,7 @@ OwncloudSyncd::OwncloudSyncd()
     m_serverURL = settings.value("serverURL").toString();
     m_ssl = settings.value("ssl").toBool();
     m_mobileData = settings.value("mobileData").toBool();
-    m_timer = settings.value("timer").toInt();
+    m_syncInterval = settings.value("timer").toInt();
 
     qDebug() << "Username: " << m_username << " Server: " << m_serverURL;
 
@@ -47,11 +47,14 @@ OwncloudSyncd::OwncloudSyncd()
         getSyncFolders();
         //addPathsToWatchlist();
 
-        QTimer *timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(syncDirs()));
-        timer->start(m_timer);
+        m_timer = new QTimer(this);
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(syncDirs()));
+        m_timer->setInterval(m_syncInterval / 100);
+        m_timer->start();
 
-        qDebug() << "Sync Frequency: " << QString::number(m_timer);
+        //timer->start(m_timer / 100);
+
+        qDebug() << "Sync Frequency: " << QString::number(m_syncInterval);
 
     }
 
@@ -236,6 +239,8 @@ void OwncloudSyncd::syncDir(const QString& localPath){
         }
 
         //Either mobile data sync is allowed or Ethernet or Wifi is available
+        //stop m_timer running while syncing
+        m_timer->stop();
     }
 
     QString protocol;
@@ -303,6 +308,10 @@ void OwncloudSyncd::syncDir(const QString& localPath){
     //m_watcher->blockSignals(false);
     //Sync Complete - Save the current date and time
     qDebug() << localPath << " - Sync Completed: " << QDateTime::currentDateTime();
+
+    //start the timer again
+    m_timer->start();
+
     //QSettings settings(m_settingsFile);
     //settings.setValue("lastSync", QDateTime::currentDateTime());
 
